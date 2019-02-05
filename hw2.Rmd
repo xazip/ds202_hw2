@@ -1,0 +1,148 @@
+---
+title: 'Homework #2'
+author: "Andrew Maloney; xazip"
+output: html_document
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## R commands
+1. Today's temperature has a high of 15 and a low of -10 degree fahrenheit.  Find the corresponding degress in celsius and storage it in a (single) vector named `cel`. Print the variable.
+
+## Answer(1)
+```{r}
+fahrenheit <- c(15, -10) 
+Celcius = ((fahrenheit - 32) * 5 ) / 9 
+cel <- c(Celcius)
+print(cel) 
+```
+
+ 
+2. Create a vector of length 200. The odd entries should be 1 and even entries should be 0. Storage the created in a variable named `vec200` and print.
+
+### Answer(2)
+```{r}
+x <- c(1,0)
+vec200 <- rep.int(x, 200)
+print(vec200)
+
+```
+
+
+3. How many perfect squares are there between 1 and 1001? Storage the answer in a  variable named `numPerfect` and print. You may want to look at `?round`.
+
+## Answer(3)
+```{r}
+
+x <- c(1:1001)
+
+y <- round(sqrt(x))^2
+
+func <-ifelse(y == x, 1, 0)
+
+numPerfect <- sum(func > 0)
+print(numPerfect)
+
+```
+
+## Cars and mileage
+For this part we will use the `mpg` data set, you can access the data by loading the package `ggplot2` into your R session by executing the command 
+`library(ggplot2)`. The `mpg` data includes information about fuel economy of popular car models
+for the years 1999 and 2008 as collected by the US Environmental Protection Agency. An answer should include a short paragraph of text for the explanation to a (human) reader, together with appropriate R code, outputs, and graphs.
+
+Most exercises are from the ggplot2 book section 2.2.1. You might find it helpful for working on the homework to read through this section.
+
+```{r}
+library(ggplot2)
+library(forcats)
+mpg
+
+```
+
+
+
+1. What are the 3 most fuel-efficient models in terms of highway mileage? Storage the data frame (with 3 rows) containing all information of these three cars in a variable named `top3` and print.
+
+## Answer(1)
+
+```{r}
+
+str(mpg)
+nrow(mpg)
+ncol(mpg)
+## 234 cars and 11 variables characterizing the car
+
+ggplot(mpg, aes(x = fct_reorder(model, hwy), y = hwy))+
+  geom_boxplot(aes(color = model))+
+  coord_flip()
+  
+
+```
+
+# Using the ggplot packages I was able to create a bar chart that plots the 3 most fuel-efficient models in terms of highway mileage.  We can see from the bar plot that corolla, civic, and new beetle are the most fuel-efficient models based on highway mileage.  Also, the plot list the fuel-efficiency of every model based on highway mileage.  I was able to re-order the models of cars using the forcats package.  
+
+2. How many different compact models are included in this dataset? Storage the answer in  a variable named `numCompact` and print.
+
+## Answer(2)
+```{r}
+CompactData <- subset(mpg, class == 'compact')
+print(CompactData)
+
+g <- ggplot(CompactData, aes(x = class))
+g + geom_bar(aes(fill = model)) + facet_wrap(~model, ncol=8) 
+
+numCompact <- 8
+```
+
+# Using the ggplot package, I was able to create a barchart showing the number of compact model vehicles in the data set.  I split the barchart into 8 sections to make my plot more presentable to a reader.  
+
+3. Create a scatterplot of `hwy` and `cty` and describe the relationship. Why are there so few points visible? 
+
+##Answer(3)
+
+```{r}
+plot(mpg$hwy, mpg$cty)
+
+ggplot(mpg, aes(x = hwy, y = cty, color = model))+
+  geom_point()
+  
+
+```
+
+# Looking at the scatterplot showing the relationship between highway and City we can deduce many things.  There seems to be a strong, positive, linear relationship between HighWay Mileage and City Mileage.  There appears to be 1 to 3 outliers.  
+# I believe so few points are visble because multiple models of cars have the same fuel efficiency. 
+
+4. Are cars in 2008 more fuel efficient than cars in 1999? Use graphs *and* summary statistics to answer this question. 
+
+```{r}
+#ggplot(mpg, aes(x = year, y = hwy, color = year))+
+  #geom_point()
+
+#ggplot(mpg, aes(x = year, y = cty, color = year))+
+  #geom_point()
+
+YearData <- subset(mpg, year == '1999')
+ggplot(YearData, aes(x = hwy, y = model, color = hwy))+
+  geom_point()
+
+YearData2 <- subset(mpg, year == '2008')
+ggplot(YearData2, aes(x = hwy, y = model, color = hwy))+
+  geom_point()
+
+ggplot(YearData, aes(x = hwy, y = model)) +
+  geom_point() + 
+  geom_point(data = YearData2, color = "blue")
+
+ggplot(YearData, aes(x = cty, y = model)) +
+  geom_point() + 
+  geom_point(data = YearData2, color = "blue")
+
+```
+
+
+#Comparing highway and city fuel efficiency of two different years is a little complicated.  We can see multiple models of the same year logged different fuel efficiencies.  This could be due to the how the driver operated his or her vehicle, the type of the terrain the driver was driving on, etc. 
+Note: your ysubmission is supposed to be fully reproducible, i.e. the TA and I will 'knit' your submission. Make sure that you don't use any file structure that depends on your computing environment.
