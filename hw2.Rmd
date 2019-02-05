@@ -76,9 +76,9 @@ nrow(mpg)
 ncol(mpg)
 ## 234 cars and 11 variables characterizing the car
 
-ggplot(mpg, aes(x = fct_reorder(model, hwy), y = hwy))+
-  geom_boxplot(aes(color = model))+
-  coord_flip()
+ggplot(mpg, aes(x = fct_reorder(model, hwy), y = hwy))+ #Reorder the models from greatest to least in terms of fuel Efficiency
+  geom_boxplot(aes(color = model))+ # Boxplot
+  coord_flip()  #Flipped Axis
   
 
 ```
@@ -89,13 +89,14 @@ ggplot(mpg, aes(x = fct_reorder(model, hwy), y = hwy))+
 
 ## Answer(2)
 ```{r}
-CompactData <- subset(mpg, class == 'compact')
+CompactData <- subset(mpg, class == 'compact') # Created a subset
 print(CompactData)
 
 g <- ggplot(CompactData, aes(x = class))
-g + geom_bar(aes(fill = model)) + facet_wrap(~model, ncol=8) 
+g + geom_bar(aes(fill = model)) + facet_wrap(~model, ncol=8) #Created a split barchart using ggplot and facet_wrap
 
 numCompact <- 8
+print(numCompact)
 ```
 
 # Using the ggplot package, I was able to create a barchart showing the number of compact model vehicles in the data set.  I split the barchart into 8 sections to make my plot more presentable to a reader.  
@@ -105,6 +106,7 @@ numCompact <- 8
 ##Answer(3)
 
 ```{r}
+## Scatter Plots
 plot(mpg$hwy, mpg$cty)
 
 ggplot(mpg, aes(x = hwy, y = cty, color = model))+
@@ -119,6 +121,19 @@ ggplot(mpg, aes(x = hwy, y = cty, color = model))+
 4. Are cars in 2008 more fuel efficient than cars in 1999? Use graphs *and* summary statistics to answer this question. 
 
 ```{r}
+
+## Summary Statistics for fuel efficiency and year
+fuel1999 <- mpg[mpg$year == 1999,]
+summary(fuel1999$hwy)
+summary(fuel1999$cty) 
+
+fuel2008 <- mpg[mpg$year == 2008,]
+summary(fuel2008$hwy)
+summary(fuel2008$cty)
+
+```
+
+```{r}
 #ggplot(mpg, aes(x = year, y = hwy, color = year))+
   #geom_point()
 
@@ -126,12 +141,12 @@ ggplot(mpg, aes(x = hwy, y = cty, color = model))+
   #geom_point()
 
 YearData <- subset(mpg, year == '1999')
-ggplot(YearData, aes(x = hwy, y = model, color = hwy))+
-  geom_point()
+#ggplot(YearData, aes(x = hwy, y = model, color = hwy))+
+  #geom_point()
 
 YearData2 <- subset(mpg, year == '2008')
-ggplot(YearData2, aes(x = hwy, y = model, color = hwy))+
-  geom_point()
+#ggplot(YearData2, aes(x = hwy, y = model, color = hwy))+
+  #geom_point()
 
 ggplot(YearData, aes(x = hwy, y = model)) +
   geom_point() + 
@@ -144,5 +159,5 @@ ggplot(YearData, aes(x = cty, y = model)) +
 ```
 
 
-#Comparing highway and city fuel efficiency of two different years is a little complicated.  We can see multiple models of the same year logged different fuel efficiencies.  This could be due to the how the driver operated his or her vehicle, the type of the terrain the driver was driving on, etc. 
+#Comparing highway and city fuel efficiency of two different years is a little complicated.  We can see multiple models of the same year logged different fuel efficiencies.  This could be due to the how the driver operated his or her vehicle, the type of the terrain the driver was driving on, etc. Fromm the summary statistics, it looks like car models from 1999 logged overall better fuel efficiency, compared to car models from 2008.  Looking at the point plot using ggplot package we can see there were actually more cars from 1999 that logged better fuel efficiency for highway and city gas mileage.  The models of cars that logged the highest fuel efficiency were also from the year 1999.   Models from 1999 are plotted black and Models from 2008 are plotted blue.   
 Note: your ysubmission is supposed to be fully reproducible, i.e. the TA and I will 'knit' your submission. Make sure that you don't use any file structure that depends on your computing environment.
