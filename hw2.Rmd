@@ -76,10 +76,14 @@ nrow(mpg)
 ncol(mpg)
 ## 234 cars and 11 variables characterizing the car
 
-ggplot(mpg, aes(x = fct_reorder(model, hwy), y = hwy))+ #Reorder the models from greatest to least in terms of fuel Efficiency
+ggplot(mpg, aes(x = reorder(model, hwy), y = hwy))+ #Reorder the models from greatest to least in terms of fuel Efficiency
   geom_boxplot(aes(color = model))+ # Boxplot
   coord_flip()  #Flipped Axis
   
+#Citing the use of reorder function using ggplot
+
+#I learned about reordering from stack overflow.  I was directed to https://www.rdocumentation.org/packages/forcats/versions/0.3.0/topics/fct_reorder to learn about the forcats documentation.
+#Also from here https://www.r-graph-gallery.com/267-reorder-a-variable-in-ggplot2/
 
 ```
 
